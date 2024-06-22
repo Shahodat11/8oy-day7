@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from '../../api'
 import { useGetInputValue } from '../../hooks/useGetInputValue'
 
 const initialState = {
@@ -11,16 +12,19 @@ const Login = () => {
 
     const handleLogin = e =>{
         e.preventDefault()
-        console.log(formData);
-        setFormData(initialState)
+        axios 
+            .post("/auth/sign-in", formData)
+            .then(res =>{
+                localStorage.setItem("x-auth-token", res.data.data.token)
+            })
     }
   return (
     <div>
         <div>
             <form onSubmit={handleLogin}>
-                <h2>login</h2>
-                <input value={formData.UserName} onChange={handleChange} name='UserName' type="text" />
-                <input value={formData.password} onChange={handleChange} name='password' type="password" />
+                <h2>Login</h2>
+                <input value={formData.UserName} onChange={handleChange} name='UserName' type="text" placeholder='UserName'/>
+                <input value={formData.password} onChange={handleChange} name='password' type="password" placeholder='password' />
                 <button>Login</button>
             </form>
         </div>
